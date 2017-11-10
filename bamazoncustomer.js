@@ -8,3 +8,8 @@ const connection = mysql.createConnection({
 	password: "",
 	database: "bamazonDB",
 });
+
+connection.connect((err) =>{
+	if (err) throw err;
+	console.log(`connected as id ${connection.threadId}`);
+});
