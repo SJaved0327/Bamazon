@@ -12,34 +12,58 @@ const connection = mysql.createConnection({
 connection.connect((err) =>{
 	if (err) throw err;
 	console.log(`connected as id ${connection.threadId}`);
+	console.log(`Welcome to Bamazon! What would you like to purchase?`);
 	runCustomer();
 });
 
 function runCustomer() {
 	inquirer
-	    .prompt({
-	      name: "buy",
-	      type: "list",
-	      message: "What department are you browsing?",
-	      choices: [
-	        "Pets",
-	        "Home",
-	        "Cosmetics"
-	      ]
-	    })
+	    .prompt([
+	    {
+	      	name: "id",
+	      	type: "input",
+	      	message: "Enter the item id: ",
+	      	validate: function(value) {
+	          if (isNaN(value) === false) {
+	            return true;
+	          }
+	          return false;
+	        }
+	    },
+	    {
+		 	name: "quantitiy",
+	        type: "input",
+	        message: "Enter the item quantitiy for purchase: ",
+	        validate: function(value) {
+	          if (isNaN(value) === false) {
+	            return true;
+	          }
+	          return false;
+	        }
+	    }
+	    ])
 	    .then(function(answer) {
-	      switch (answer.buy) {
-	        case "Pets":
-	          petsSearch();
-	          break;
+	      console.log("Hello!");
+      	});
+};
 
-	        case "Home":
-	          homeSearch();
-	          break;
+function petSearch(){
 
-	        case "Cosmetics":
-	          cosmeticsSearch();
-	          break;
-      	}
-   	});
-}
+
+};
+
+function homeSearch(){
+
+
+};
+
+
+function cosmeticsSearch(){
+
+
+};
+
+
+
+
+
