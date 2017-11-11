@@ -44,24 +44,17 @@ function runCustomer() {
 	    ])
 	    .then(function(answer) {
 	      console.log("Hello!");
+
+
+
+
+
+
+
       	});
 };
 
-function petSearch(){
 
-
-};
-
-function homeSearch(){
-
-
-};
-
-
-function cosmeticsSearch(){
-
-
-};
 
 
 
