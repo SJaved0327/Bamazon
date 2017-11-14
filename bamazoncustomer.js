@@ -11,9 +11,11 @@ const connection = mysql.createConnection({
 
 connection.connect((err) =>{
 	if (err) throw err;
-	console.log(`connected as id ${connection.threadId}`);
+
+	console.log("* * * * * * * * * * * * * * * * * * *");
 	console.log(`Welcome to Bamazon! What would you like to purchase?`);
 	runCustomer();
+
 });
 
 function runCustomer() {
@@ -44,75 +46,50 @@ function runCustomer() {
 		    }
 		    ])
 		    .then(function(answer) {
+		    	
+		    	let id = answer.id;
+		    	let quantity = answer.quantity;
 
-		    	connection.query("SELECT * FROM products WHERE ?", { item_id: answer.id }, function(err, res) {
+		    	connection.query("SELECT * FROM products WHERE ?", { item_id: id }, function(err, res) {
 		      		
-		      		console.log(res);
-		      		console.log(res[0].item_id);
+		      		if (err) throw err;
+
+		      		var item = res[0];
+
+		      		if (quantity < item.stock_quantity){
+
+		      			var currentStock = item.stock_quantity - quantity;
+
+		      			connection.query("UPDATE products SET ? WHERE ?",
+		      				[
+		      					{
+		      						stock_quantity: currentStock
+		      					},
+		      					{
+		      						item_id: item.item_id
+		      					}
+		      				], function(err) {
+		      					if (err) throw err;
+		      					var total = quantity * item.price;
+		      					console.log("* * * * * Purchase Processed * * * * *");
+		      					console.log(`You purchased ${quantity} of ${item.product_name}.`);
+		      					console.log(`Your total is: $${total}. Thank you for shopping with Bamazon!`)
+		      					console.log("-----------------------------------");
+		      					runCustomer();
+		      				});
+        			}else{
+		      			console.log("Sorry, there is not enough inventory for this purchase.");
+		      			console.log("-----------------------------------");
+		      			runCustomer();
+		      		};
 
 	        	});
 
 		    });
-
 };
 
 
 
-/*
-function FindItem(){
 
-	connection.query("SELECT * FROM products", function(err, results) {
-
-
-
-
-
-};
-connection.query("SELECT * FROM products", function(err, results) {
- 					
- 					if (err) throw err;
-
- 					var id = answer.id;
-		      		var quantity = answer.quantity;
-			    	var chosenItem;
-
-		        	for (var i = 0; i < results.length; i++) {
-		        	
-		          		if (results[i].item_id === id) {
-		            		
-		            		chosenItem = results[i];
-
-		          		}
-
-		        	}
-
-		        	console.log(chosenItem);
-
-		        	
-		        	//console.log(stock);
-
-		        	//CheckInventory();
-		        
-
-		        });
-
-
-
-
-
-
-
-
-
-function CheckInventory(){
-
-
-
-
-
-
-
-};
-*/
 
 
